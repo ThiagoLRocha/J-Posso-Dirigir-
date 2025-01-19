@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Teor Alcoólico</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+        }
+        .container {
+            max-width: 500px;
+            margin: auto;
+        }
+        input, button {
+            display: block;
+            margin: 10px 0;
+            padding: 10px;
+            width: 100%;
+        }
+        canvas {
+            margin: 20px auto;
+            max-width: 100%;
+        }
+        .result {
+            margin-top: 20px;
+            text-align: center;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Calculadora de Teor Alcoólico no Sangue</h1>
+        <label for="weight">Seu Peso (kg):</label>
+        <input type="number" id="weight" placeholder="ex.: 70" required>
+
+        <label for="drinks">Número de Bebidas:</label>
+        <input type="number" id="drinks" placeholder="ex.: 3" required>
+
+        <label for="volume">Volume de Cada Bebida (mL):</label>
+        <input type="number" id="volume" placeholder="ex.: 330" required>
+
+        <label for="alcohol">Porcentagem de Álcool (%):</label>
+        <input type="number" step="0.1" id="alcohol" placeholder="ex.: 5" required>
+
+        <button onclick="calculateBAC()">Calcular Teor Alcoólico</button>
+        <canvas id="bacChart"></canvas>
+        <div class="result" id="result"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
