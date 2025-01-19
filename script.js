@@ -1,29 +1,32 @@
 function calculateBAC() {
-    // Obter os dados inseridos
+    // Get user inputs
     const weight = parseFloat(document.getElementById("weight").value);
     const drinks = parseInt(document.getElementById("drinks").value);
     const volume = parseFloat(document.getElementById("volume").value);
     const alcohol = parseFloat(document.getElementById("alcohol").value);
 
-    // Constantes
+    // Constants
     const alcoholDensity = 0.789; // g/mL
-    const bodyWaterConstant = 0.58; // para homens (0.49 para mulheres, se necessário)
-    const metabolismRate = 0.015; // Redução de BAC por hora
+    const bodyWaterConstant = 0.58; // for men (0.49 for women)
+    const metabolismRate = 0.015; // BAC decrease per hour
 
-    // Álcool total consumido em gramas
+    // Calculate total alcohol consumed (in grams)
     const totalAlcohol = drinks * volume * (alcohol / 100) * alcoholDensity;
 
-    // Cálculo do BAC
+    // Calculate the peak BAC
     const bacPeak = (totalAlcohol / (weight * bodyWaterConstant)) * 100;
-    const timeIntervals = Array.from({ length: 12 }, (_, i) => i); // 12 horas
-    const bacLevels = timeIntervals.map(
-        (time) => Math.max(bacPeak - metabolismRate * time, 0)
-    );
 
-    // Atualizar o gráfico
+    // Time intervals (12 hours)
+    const timeIntervals = Array.from({ length: 12 }, (_, i) => i); // 0 to 11 hours
+    const bacLevels = timeIntervals.map((time) => {
+        const currentBAC = bacPeak - metabolismRate * time; // Decrease over time
+        return Math.max(currentBAC, 0); // BAC can't go below 0
+    });
+
+    // Update the graph
     updateGraph(timeIntervals, bacLevels);
 
-    // Verificar se a pessoa pode dirigir
+    // Check if the person can drive at the initial BAC level
     const resultText = bacLevels[0] < 0.06
         ? "Você está apto a dirigir."
         : "Você não deve dirigir.";
@@ -35,10 +38,10 @@ function updateGraph(time, bacLevels) {
     new Chart(ctx, {
         type: "line",
         data: {
-            labels: time.map((t) => `${t}h`),
+            labels: time.map((t) => `${t}h`), // Time labels
             datasets: [{
                 label: "Teor Alcoólico no Sangue (BAC)",
-                data: bacLevels,
+                data: bacLevels, // BAC levels
                 borderColor: "blue",
                 fill: false,
             }],
